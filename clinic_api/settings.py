@@ -37,10 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'rest_framework',         # 注册 DRF
     'corsheaders',            # 注册跨域处理
     'clinic',                 # 注册新创建的app
+    'rest_framework.authtoken',  # Token 认证模块
 ]
 
 MIDDLEWARE = [

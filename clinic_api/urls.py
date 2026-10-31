@@ -1,22 +1,19 @@
-"""
-URL configuration for clinic_api project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import obtain_auth_token
+from clinic.views import DoctorViewSet, TimeSlotViewSet, AppointmentViewSet
+
+# 创建 DRF 路由器，自动生成 API 地址
+router = DefaultRouter()
+router.register(r'doctors', DoctorViewSet)
+router.register(r'slots', TimeSlotViewSet)
+router.register(r'appointments', AppointmentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # 登录获取 Token 的 API (login: username, password -> token)
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    # 包含刚才生成的 API 路由
+    path('api/', include(router.urls)),
 ]
