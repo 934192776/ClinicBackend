@@ -21,4 +21,4 @@ COPY . /app/
 EXPOSE 8000
 
 # 8. 容器启动时，默认执行 Django 的开发服务器，绑定到 0.0.0.0 允许外部访问
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "clinic_api.wsgi:application", "--bind", "0.0.0.0:8000"]
