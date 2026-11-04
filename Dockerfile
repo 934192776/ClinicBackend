@@ -1,5 +1,5 @@
 # 1. 指定基础镜像：使用官方提供的轻量级 Python 3.11 运行环境
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # 2. 设置环境变量，防止 Python 把生成的字节码文件（.pyc）写进硬盘，并让控制台日志实时输出
 ENV PYTHONDONTWRITEBYTECODE=1
