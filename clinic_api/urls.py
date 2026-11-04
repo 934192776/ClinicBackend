@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 from clinic.views import DoctorViewSet, TimeSlotViewSet, AppointmentViewSet
-from clinic.views import DoctorViewSet, TimeSlotViewSet, AppointmentViewSet, current_user
+from clinic.views import DoctorViewSet, TimeSlotViewSet, AppointmentViewSet, current_user, create_admin
 
 # 创建 DRF 路由器，自动生成 API 地址
 router = DefaultRouter()
@@ -18,4 +18,5 @@ urlpatterns = [
     # 包含刚才生成的 API 路由
     path('api/', include(router.urls)),
     path('api/current-user/', current_user, name='current_user'),
+    path('api/create-admin/', create_admin, name='create_admin'),
 ]

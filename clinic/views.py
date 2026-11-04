@@ -76,3 +76,21 @@ def current_user(request):
         'is_staff': request.user.is_staff,
         'is_superuser': request.user.is_superuser
     })
+
+
+# 临时网页：在线上强制创建超级管理员
+from django.http import HttpResponse
+
+def create_admin(request):
+    """临时网页：用来在线上免费创建超级管理员"""
+    try:
+        # 查找或创建 admin 账号
+        user, created = User.objects.get_or_create(username='admin')
+        # 强制重置密码并赋予超级权限
+        user.set_password('Clinic@2026')
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+        return HttpResponse("成功！账号 admin 已创建，密码是 Clinic@2026。请立刻删除此代码并重新部署。")
+    except Exception as e:
+        return HttpResponse(f"失败了: {e}")
