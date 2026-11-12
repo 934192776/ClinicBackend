@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Doctor(models.Model):
     """ 定义医生，（对应数据库的医生表），一对一关联Django内置User """
     # 一个用户User对应一个医生资料
-    user = models.OneToOneField(  # User字段：一对一关联内置User表， OneToOneField 一对一：一个User只能绑定一个医生，一个医生只属于一个User
+    user = models.OneToOneField(  # User字段： OneToOneField 一对一：一个User只能绑定一个医生，一个医生只属于一个User
         User,  # 关联目标表：Django内置User表
         on_delete=models.CASCADE,  # 删除规则。CASCADE = 删父删子（删掉这个User账号时，对应的医生资料一起删除
         related_name='doctor_profile'  # related_name：反向查询名字，以后拿到User对象时,可以用User.doctor_profile直接找到对应的医生信息
@@ -104,7 +104,7 @@ class Appointment(models.Model):
         default='Booked'
     )
 
-    # 患者备注（选填）
+    # 患者备注
     notes = models.TextField(blank=True)
 
     # 创建时间
