@@ -1,0 +1,39 @@
+name: Django API Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest requests
+
+    - name: Run Migrations and Setup DB
+      run: |
+        python manage.py migrate
+        DJANGO_SUPERUSER_PASSWORD=Clinic@2026 python manage.py createsuperuser --noinput --username admin --email admin@test.com || true
+
+    - name: Start Server
+      run: python manage.py runserver 8000 &
+
+    - name: Run Pytest Scripts
+      run: |
+        sleep 5
+        pytest test_api.py -v
