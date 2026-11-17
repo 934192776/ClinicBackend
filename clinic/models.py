@@ -62,6 +62,8 @@ class TimeSlot(models.Model):
 
     start_time = models.TimeField()  # 时间字段，只存几点几分
 
+    end_time = models.TimeField(default='09:30')
+
     is_available = models.BooleanField(default=True)  # is_available是否可预约,布尔值： default=True 默认新建出来就是“可预约”
 
     # 创建时间

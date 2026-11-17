@@ -56,7 +56,7 @@ class TimeSlotSerializer(serializers.ModelSerializer):  # 时间段序列化器
 
     class Meta:
         model = TimeSlot
-        fields = ['id', 'doctor', 'doctor_id', 'date', 'start_time', 'is_available']
+        fields = ['id', 'doctor', 'doctor_id', 'date', 'start_time', 'end_time', 'is_available']
         # id是系统自动生成的。前端请求时，Admin传 doctor_id, date, start_time；医生只传 date, start_time
 
 

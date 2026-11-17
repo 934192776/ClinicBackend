@@ -136,24 +136,6 @@ def current_user(request):
         'is_superuser': request.user.is_superuser
     })
 
-
-# 管理员专属接口（管理患者）
-@api_view(['GET', 'DELETE'])
-@permission_classes([IsAdminUser])
-def manage_patients(request, pk=None):
-    if request.method == 'GET':
-
-        patients = User.objects.filter(is_staff=False).values('id', 'username', 'email')
-        return Response(list(patients))
-    elif request.method == 'DELETE':
-        try:
-            user = User.objects.get(id=pk, is_staff=False)
-            user.delete()
-            return Response({"message": "Patient deleted"}, status=204)
-        except User.DoesNotExist:
-            return Response({"error": "Patient not found"}, status=404)
-
-
 # 患者注册接口
 class RegisterView(APIView):
     permission_classes = []
@@ -190,3 +172,30 @@ class CreateDoctorView(APIView):
         Doctor.objects.create(user=user, specialty=specialty, phone=phone, bio=bio)
 
         return Response({"message": "Doctor created successfully"}, status=status.HTTP_201_CREATED)
+
+# Admin 创建患者接口
+class CreatePatientView(APIView):
+    permission_classes = [IsAdminUser] # 只有 Admin 能访问
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        phone = request.data.get('phone', '')
+        email = request.data.get('email', '')
+
+        if User.objects.filter(username=username).exists():
+            return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 创建普通用户（is_staff 默认为 False）
+        user = User.objects.create_user(username=username, password=password, email=email)
+        # 创建患者档案
+        Patient.objects.create(user=user, phone=phone)
+
+        return Response({"message": "Patient created successfully"}, status=status.HTTP_201_CREATED)
+
+    # 管理员专属接口（仅查看患者列表）
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def manage_patients(request):
+    patients = User.objects.filter(is_staff=False).values('id', 'username', 'email')
+    return Response(list(patients))
